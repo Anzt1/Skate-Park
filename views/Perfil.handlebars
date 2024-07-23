@@ -1,0 +1,102 @@
+<div class="py-4">
+    <h2>Datos del perfil</h2>
+    <hr class="w-50" />
+
+    <form>
+        <div class="form-group row w-50 m-auto">
+            <div class="form-group col-12 col-sm-6">
+                <label>Email</label>
+                <input name="email" class="form-control m-auto" disabled value="{{skater.email}}" />
+            </div>
+            <div class="form-group col-12 col-sm-6">
+                <label>Nombre</label>
+                <input name="nombre" class="form-control m-auto" value="{{skater.nombre}}" />
+            </div>
+            <div class="form-group col-12 col-sm-6">
+                <label>Password</label>
+                <input name="password" type="password" class="form-control m-auto" value="{{skater.password}}" />
+            </div>
+            <div class="form-group col-12 col-sm-6">
+                <label>Repita la password</label>
+                <input type="password" class="form-control m-auto" value="{{skater.password}}" />
+            </div>
+            <div class="form-group col-12 col-sm-6">
+                <label>Años de experiencia</label>
+                <input name="años_experiencia" class="form-control m-auto" value="{{skater.anos_experiencia}}" />
+            </div>
+            <div class="form-group col-12 col-sm-6">
+                <label>Especialidad</label>
+                <input name="especialidad" class="form-control m-auto" value="{{skater.especialidad}}" />
+            </div>
+
+        </div>
+        <div class="mb-1">
+            <button class="btn btn-primary" id="updateBtn">Actualizar</button>
+        </div>
+        <div>
+        </div>
+    </form>
+    <button class="btn btn-danger" id="deleteBtn">Eliminar cuenta</button>
+</div>
+
+<script>
+    // Selecciona el botón de eliminar por su ID
+    const deleteBtn = document.getElementById("deleteBtn")
+
+    // Se obtiene el id del skater
+    const id = `{{skater.id}}`
+
+    // Evento click para el botón de eliminar
+    deleteBtn.addEventListener("click", async () => {
+
+        try {
+            //Se envía una solicitud DELETE al servidor para eliminar al skater con el ID correspondiente
+            const { data: token } = await axios.delete(`/skaters/${id}`)
+            alert("Usuario eliminado con éxito")
+
+            // Redirige a la página principal
+            window.location = `/`
+        } catch ({ response }) {
+            const { data } = response
+            const { error } = data
+            alert(error)
+        }
+    })
+
+    // Se accede al form
+    const form = document.querySelector("form")
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault()
+
+         // Obtiene los valores de los campos de entrada del formulario
+        let [email, nombre, password, repassword, años_experiencia, especialidad] = document.querySelectorAll("input")
+
+         // Se obtienne los valores de las variables
+        nombre = nombre.value
+        password = password.value
+        años_experiencia = años_experiencia.value
+        especialidad = especialidad.value
+
+        // Se crea un objeto 'skater' con los datos del formulario
+        const skater = {
+            nombre,
+            password,
+            años_experiencia,
+            especialidad
+        }
+        try {
+            // Se envía una solicitud PUT al servidor para actualizar los datos del skater
+            await axios.put("/skaters", skater)
+            alert("Datos actualizados con éxito")
+
+            // Redirige a la página de inicio de sesión
+            window.location = "/login"
+        } catch ({ response }) {
+            const { data } = response
+            const { error } = data
+            alert(error)
+        }
+
+    })
+</script>

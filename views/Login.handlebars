@@ -1,0 +1,49 @@
+<div class="py-5">
+  <h2>Iniciar Sesión</h2>
+  <hr class="w-50" />
+
+  <form>
+    <div class="form-group">
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-control w-50 m-auto" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input class="form-control w-50 m-auto" />
+      </div>
+    </div>
+    <button class="btn btn-success mb-3">Ingresar</button>
+    <p>¿Aún no tienes cuenta? <a href="/registro">Regístrate</a></p>
+  </form>
+</div>
+
+<script>
+
+  // Selecciona el formulario en la página
+  const form = document.querySelector("form")
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault()
+
+    // Obtiene los elementos de entrada (inputs) de email y contraseña
+    let [email, password] = document.querySelectorAll("input")
+
+    // Obtiene los valores de email y contraseña
+    email = email.value
+    password = password.value
+
+    try {
+       // Envia una solicitud POST asíncrona a "/login" con axios
+      const { data: token } = await axios.post("/login", { email, password })
+      
+      // Si la solicitud es éxitosa, redirige a la página de perfil con el token como parámetro
+      window.location = `/Perfil?token=${token}`
+    } catch ({ response }) {
+      const { data } = response
+      const { error } = data
+      alert(error)
+    }
+
+  })
+</script>
