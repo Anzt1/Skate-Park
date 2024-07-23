@@ -5,7 +5,6 @@ const exphbs = require("express-handlebars");
 const expressFileUpload = require("express-fileupload");
 const jwt = require("jsonwebtoken");
 
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Clave secreta para JWT
 const secretKey = "hkjhj453j";
